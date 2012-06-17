@@ -5,8 +5,6 @@
 
 package com.bekvon.bukkit.parties;
 
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,12 +12,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
 /**
  *
@@ -32,7 +28,8 @@ public class Parties extends JavaPlugin {
     private static PartyEntityListener pelistener;
     private static PartyPlayerListener pplistener;
     private boolean firstenable = true;
-    private static PermissionHandler authority;
+
+    private static final String CONFIG_FILENAME = "config.yml";
     
     public void onDisable() {
         PartyManager.serialize(pmanager, new File(this.getDataFolder(),"parties.dat"));
@@ -48,19 +45,22 @@ public class Parties extends JavaPlugin {
     }
 
     public void onEnable() {
+        mcserv = this.getServer();
         if(firstenable)
         {
-            getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN, pplistener, Priority.Normal, this);
-            getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, pplistener, Priority.Normal, this);
-            getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, pplistener, Priority.Normal, this);
-            getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, pelistener, Priority.Normal, this);
+            PluginManager pluginManager = mcserv.getPluginManager();
+            pluginManager.registerEvents(pelistener, this);
+            pluginManager.registerEvents(pplistener, this);
             firstenable = false;
         }
-        mcserv = this.getServer();
-        if(!this.getDataFolder().isDirectory())
-            this.getDataFolder().mkdirs();
-        this.getConfiguration().load();
-        Configuration config = this.getConfiguration();
+        if(!getDataFolder().isDirectory()) {
+            getDataFolder().mkdirs();
+        }
+        File configFile = new File(getDataFolder(), CONFIG_FILENAME);
+        if (configFile.exists()) {
+            reloadConfig();
+        }
+        FileConfiguration config = this.getConfig();
         pmanager = PartyManager.deserialize(new File(this.getDataFolder(),"parties.dat"));
         if(pmanager == null)
             pmanager = new PartyManager();
@@ -87,7 +87,6 @@ public class Parties extends JavaPlugin {
             pmanager.setSuccessColor(ChatColor.GREEN);
         }
         Logger.getLogger("Minecraft").log(Level.INFO, "[Parties] Enabled! Version: " + this.getDescription().getVersion() + " by bekvon");
-        checkPermissions();
     }
 
     @Override
@@ -270,31 +269,5 @@ public class Parties extends JavaPlugin {
     public static PartyManager getPartyManager()
     {
         return pmanager;
-    }
-
-    public static PermissionHandler getAuthorityManager()
-    {
-        return authority;
-    }
-
-    public static boolean hasAuthority(Player player, String permission, boolean def)
-    {
-        if(player.hasPermission(permission))
-            return true;
-        if(authority == null)
-            return def;
-        else
-            return authority.has(player, permission);
-    }
-
-    private void checkPermissions() {
-        Plugin p = getServer().getPluginManager().getPlugin("Permissions");
-        if (p != null) {
-            authority = ((Permissions) p).getHandler();
-            Logger.getLogger("Minecraft").log(Level.INFO, "[Parties] Found Permissions Plugin!");
-        } else {
-            authority = null;
-            Logger.getLogger("Minecraft").log(Level.INFO, "[Parties] Permissions Plugin NOT Found!");
-        }
     }
 }

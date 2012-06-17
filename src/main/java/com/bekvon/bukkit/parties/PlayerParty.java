@@ -14,6 +14,10 @@ import org.bukkit.entity.Player;
  * @author Administrator
  */
 public class PlayerParty implements Serializable {
+    /**
+     * Auto-generated serialVersionUID.
+     */
+    private static final long serialVersionUID = -827484503004287080L;
     private int partyLeader;
     private ArrayList<String> joinedPlayers;
     private String partyName;
@@ -155,15 +159,6 @@ public class PlayerParty implements Serializable {
         }
     }
 
-    private synchronized String getPlayerFromName(String name) {
-        for (int i = 0; i < joinedPlayers.size(); i++) {
-            String player = joinedPlayers.get(i);
-            if(player.equals(name))
-                return player;
-        }
-        return null;
-    }
-    
     public String[] getPlayerList()
     {
         String[] list = new String[joinedPlayers.size()];

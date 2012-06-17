@@ -7,15 +7,17 @@ package com.bekvon.bukkit.parties;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityListener;
 
 /**
  *
  * @author Administrator
  */
-public class PartyEntityListener extends EntityListener {
+public class PartyEntityListener implements Listener {
 
     private Parties parent;
     
@@ -24,7 +26,7 @@ public class PartyEntityListener extends EntityListener {
         parent = plugIn;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.isCancelled() || !parent.isEnabled())
             return;
@@ -47,7 +49,6 @@ public class PartyEntityListener extends EntityListener {
                 }
             }
         }
-        super.onEntityDamage(event);
     }
 
 }

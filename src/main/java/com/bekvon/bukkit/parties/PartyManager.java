@@ -24,6 +24,11 @@ import org.bukkit.entity.Player;
  */
 public class PartyManager implements Serializable {
 
+    /**
+     * Auto-generated serialVersionUID.
+     */
+    private static final long serialVersionUID = -8956649024573825171L;
+
     private Map<String,PlayerParty> parties;
     private Map<String,String> playersParty;
     private Map<String,PartyType> ptype;
@@ -64,8 +69,8 @@ public class PartyManager implements Serializable {
         Player player = Parties.getPlayer(creator);
         if(player == null)
             return;
-        boolean hasDeny = Parties.hasAuthority(player, "parties.deny.create", false);
-        boolean hasAllow = Parties.hasAuthority(player, "parties.allow.create", false);
+        boolean hasDeny = player.hasPermission("parties.deny.create");
+        boolean hasAllow = player.hasPermission("parties.allow.create");
         if(!hasAllow && (hasDeny))
         {
             player.sendMessage(errorcolor+"You dont have access to party creation.");
@@ -136,8 +141,8 @@ public class PartyManager implements Serializable {
         if (player == null) {
             return;
         }
-        boolean hasDeny = Parties.hasAuthority(player, "parties.deny.join", false);
-        boolean hasAllow = Parties.hasAuthority(player, "parties.allow.join", false);
+        boolean hasDeny = player.hasPermission("parties.deny.join");
+        boolean hasAllow = player.hasPermission("parties.allow.join");
         if(!hasAllow && (hasDeny))
         {
             player.sendMessage(errorcolor+"You dont have access to join partys.");
@@ -160,8 +165,6 @@ public class PartyManager implements Serializable {
             } else {
                 player.sendMessage(errorcolor+"This is not a free-join party...");
             }
-        } else {
-            player.sendMessage(errorcolor+"Party does not exist.");
         }
     }
 
@@ -195,8 +198,8 @@ public class PartyManager implements Serializable {
         Player player = Parties.getPlayer(sendPlayer);
         if(player == null || !player.isOnline())
             return;
-        boolean hasDeny = Parties.hasAuthority(player, "parties.deny.chat", false);
-        boolean hasAllow = Parties.hasAuthority(player, "parties.allow.chat", false);
+        boolean hasDeny = player.hasPermission("parties.deny.chat");
+        boolean hasAllow = player.hasPermission("parties.allow.chat");
 
         if(!hasAllow && (hasDeny || !chatEnabled))
         {
@@ -224,8 +227,8 @@ public class PartyManager implements Serializable {
         Player reqPlayer = Parties.getPlayer(requestPlayer);
         if(reqPlayer == null || !reqPlayer.isOnline())
             return;
-        boolean hasDeny = Parties.hasAuthority(reqPlayer, "parties.deny.tp", false);
-        boolean hasAllow = Parties.hasAuthority(reqPlayer, "parties.allow.tp", false);
+        boolean hasDeny = reqPlayer.hasPermission("parties.deny.tp");
+        boolean hasAllow = reqPlayer.hasPermission("parties.allow.tp");
         if(!hasAllow && (hasDeny || !tpEnabled))
         {
             reqPlayer.sendMessage(errorcolor+"You dont have access to party teleport.");
@@ -290,8 +293,8 @@ public class PartyManager implements Serializable {
             reqPlayer.sendMessage(errorcolor+"Invalid target player.");
             return;
         }
-        boolean hasDeny = Parties.hasAuthority(targPlayer, "parties.deny.join", false);
-        boolean hasAllow = Parties.hasAuthority(targPlayer, "parties.allow.join", false);
+        boolean hasDeny = targPlayer.hasPermission("parties.deny.join");
+        boolean hasAllow = targPlayer.hasPermission("parties.allow.join");
         if(!hasAllow && (hasDeny))
         {
             reqPlayer.sendMessage(errorcolor+"Target person doesn't have access to join parties.");

@@ -5,16 +5,17 @@
 
 package com.bekvon.bukkit.parties;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
- *
- * @author Administrator
+ * Listens to player-specific events.
  */
-public class PartyPlayerListener extends PlayerListener {
+public class PartyPlayerListener implements Listener {
 
     private Parties parent;
 
@@ -23,7 +24,14 @@ public class PartyPlayerListener extends PlayerListener {
         parent = plugIn;
     }
 
-    @Override
+    /**
+     * Called when player chat events occur, to reroute chat messages to the
+     * party when appropriate.
+     * 
+     * @param event
+     *            Chat event containing the event details.
+     */
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChat(PlayerChatEvent event) {
         if(event.isCancelled() || !parent.isEnabled())
             return;
@@ -36,10 +44,17 @@ public class PartyPlayerListener extends PlayerListener {
             event.setCancelled(true);
             return;
         }
-        super.onPlayerChat(event);
     }
 
-    @Override
+    /**
+     * Called when a player logs in, to initialise party chat where applicable
+     * and to notify the party.
+     * 
+     * @param event
+     *            Player login event, containing detailed information about the
+     *            event.
+     */
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerLogin(PlayerLoginEvent event) {
         if(!parent.isEnabled())
             return;
@@ -48,10 +63,17 @@ public class PartyPlayerListener extends PlayerListener {
             Parties.getPartyManager().sendPartyMessage(Parties.getPartyManager().getPlayersPartyName(pname),"Party Member " + pname+" has logged in.");
             return;
         }
-        super.onPlayerLogin(event);
     }
 
-    @Override
+    /**
+     * Called when a player logs out, to update the party manager and notify
+     * party members.
+     * 
+     * @param event
+     *            Player quit event, containing detailed information about the
+     *            event.
+     */
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent event) {
         if(!parent.isEnabled())
             return;
@@ -60,6 +82,5 @@ public class PartyPlayerListener extends PlayerListener {
             Parties.getPartyManager().sendPartyMessage(Parties.getPartyManager().getPlayersPartyName(pname), "Party Member " + pname+" has logged out.");
             return;
         }
-        //super.onPlayerQuit(event);
     }
 }
