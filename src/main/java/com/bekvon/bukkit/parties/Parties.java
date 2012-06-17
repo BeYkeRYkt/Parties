@@ -24,6 +24,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Parties extends JavaPlugin {
 
     private static PartyManager pmanager;
+    
+    private static final Logger logger = Logger.getLogger("Minecraft");
+
     private static Server mcserv;
     private static PartyEntityListener pelistener;
     private static PartyPlayerListener pplistener;
@@ -36,7 +39,7 @@ public class Parties extends JavaPlugin {
         pmanager.disbandAllPartys();
         pmanager = null;
         mcserv = null;
-        Logger.getLogger("Minecraft").log(Level.INFO, "[Parties] Disabled!");
+        logger.log(Level.INFO, "[Parties] Disabled!");
     }
 
     public void onLoad() {
@@ -72,12 +75,12 @@ public class Parties extends JavaPlugin {
         pmanager.setMessagePrefix(config.getString("partyMessagePrefix","[Party Message]"));
         try
         {
-            pmanager.setChatColor(ChatColor.valueOf(config.getString("partyChatColor","GREEN").toUpperCase()));
-            pmanager.setChatPrefixColor(ChatColor.valueOf(config.getString("partyChatPrefixColor","DARK_GREEN").toUpperCase()));
-            pmanager.setMessageColor(ChatColor.valueOf(config.getString("partyMessageColor","GREEN").toUpperCase()));
-            pmanager.setMessagePrefixColor(ChatColor.valueOf(config.getString("partyMessagePrefixColor","DARK_GREEN").toUpperCase()));
-            pmanager.setErrorColor(ChatColor.valueOf(config.getString("partyErrorColor","RED").toUpperCase()));
-            pmanager.setSuccessColor(ChatColor.valueOf(config.getString("partySuccessColor","GREEN").toUpperCase()));
+            pmanager.setChatColor(ChatColor.valueOf(config.getString("partyChatColor",ChatColor.GREEN.name()).toUpperCase()));
+            pmanager.setChatPrefixColor(ChatColor.valueOf(config.getString("partyChatPrefixColor",ChatColor.DARK_GREEN.name()).toUpperCase()));
+            pmanager.setMessageColor(ChatColor.valueOf(config.getString("partyMessageColor",ChatColor.GREEN.name()).toUpperCase()));
+            pmanager.setMessagePrefixColor(ChatColor.valueOf(config.getString("partyMessagePrefixColor",ChatColor.DARK_GREEN.name()).toUpperCase()));
+            pmanager.setErrorColor(ChatColor.valueOf(config.getString("partyErrorColor",ChatColor.RED.name()).toUpperCase()));
+            pmanager.setSuccessColor(ChatColor.valueOf(config.getString("partySuccessColor",ChatColor.GREEN.name()).toUpperCase()));
         } catch(Exception ex){
             pmanager.setChatColor(ChatColor.GREEN);
             pmanager.setChatPrefixColor(ChatColor.DARK_GREEN);
@@ -261,8 +264,10 @@ public class Parties extends JavaPlugin {
 
     public static Player getPlayer(String player)
     {
-        if(mcserv != null)
+        if(mcserv != null) {
             return mcserv.getPlayer(player);
+        }
+        logger.warning("[Parties] null mcserv detected");
         return null;
     }
 
