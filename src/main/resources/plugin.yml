@@ -22,3 +22,34 @@ commands:
   pc:
     description: Chat in party.
     usage: /pc <Message>
+permissions:
+    parties.deny.create:
+        description:    Party creation is denied from a given player. Overridden if parties.allow.create is true.
+        default:    false
+    parties.allow.create:
+        description:    Allows a player the ability to create a party. If true, overrides parties.deny.create.
+        default:    false
+    parties.deny.join:
+        description:    Denies a player the ability to join a party. Overridden if parties.allow.join is true.
+        default:    false
+    parties.allow.join:
+        description:    Allows a player to join a party. If true, overrides parties.deny.join.
+        default:    false
+    parties.deny.chat:
+        description:    Chat is denied to a given player. Overridden if parties.allow.chat is true.
+        default:    false
+    parties.allow.chat:
+        description:    Chat is allowed for a given player. If true, overrides parties.deny.chat.
+        default:    false
+    parties.deny.tp:
+        description:    Party teleport is denied from a given player. Overridden if parties.allow.tp is true.
+        default:    false
+    parties.allow.tp:
+        description:    Party teleport is allowed for a given player. If true, overrides parties.deny.tp.
+        default:    false
+    parties.deny.join:
+        description:    Joining a party is denied to a given player. Overridden if parties.allow.join is true.
+        default:    false
+    parties.allow.join:
+        description:    Joining a party is allowed for a given player. If true, overrides parties.deny.join.
+        default:    false

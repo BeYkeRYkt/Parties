@@ -1,0 +1,12 @@
+partyChatEnabled:   true
+partyPvpEnabled:    false
+partyTpEnabled: true
+maxPartySize:   20
+partyChatPrefix:    [Party]
+partyMessagePrefix: [Party Message]
+partyChatColor: GREEN
+partyChatPrefixColor:   DARK_GREEN
+partyMessageColor:  GREEN
+partyMessagePrefixColor:    DARK_GREEN
+partyErrorColor:    RED
+partySuccessColor:  GREEN
