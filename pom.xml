@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.bekvon.bukkit</groupId>
   <artifactId>Parties</artifactId>
-  <version>1.4-SNAPSHOT</version>
+  <version>1.4</version>
   <dependencies>
     <dependency>
       <groupId>org.bukkit</groupId>
